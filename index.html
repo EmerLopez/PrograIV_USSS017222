@@ -28,39 +28,44 @@
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col col-md-2">Direccion</div>
+                        <div class="col col-md-2">DIRECCION</div>
                         <div class="col col-md-5">
                             <input v-model="producto.direccion" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col col-md-2">Municipio</div>
+                        <div class="col col-md-2">MUNICIPIO</div>
                         <div class="col col-md-3">
                             <input v-model="producto.municipio" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col col-md-2">Departamento</div>
+                        <div class="col col-md-2">DEPARTAMENTO</div>
                         <div class="col col-md-3">
                             <input v-model="producto.departamento" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col col-md-2">Telefono</div>
+                        <div class="col col-md-2">TELEFONO</div>
                         <div class="col col-md-3">
                             <input v-model="producto.telefono" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col col-md-2">Fecha de Nacimiento</div>
+                        <div class="col col-md-2">FECHA NACIMIENTO</div>
                         <div class="col col-md-3">
-                            <input v-model="producto.fecha_nacimiento" type="text" class="form-control">
+                            <input v-model="producto.fecha_nacimiento" type="date" class="form-control">
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col col-md-2">Sexo</div>
+                        <div class="col col-md-2">SEXO:</div>
                         <div class="col col-md-3">
-                            <input v-model="producto.sexo" type="text" class="form-control">
+                            <select v-model="producto.sexo" class="form-control">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+
+                            </select>
                         </div>
                     </div>
                     <div class="row p-1">
@@ -158,6 +163,10 @@
                     this.producto = producto;
                 },
                 guardarProducto(){
+                    if (this.productos.some(producto => producto.codigo === this.producto.codigo     && producto.idProducto !== this.producto.idProducto)) {
+                        alert('El código existente! Ingrese un código diferente.');
+                    return;
+                    }
                     //almacenamiento del objeto productos en localStorage
                     if( this.accion == 'nuevo' ){
                         this.productos.push(this.producto);
@@ -165,8 +174,10 @@
                         let buscar = this.productos.findIndex(producto => producto.idProducto==this.producto.idProducto);
                         this.productos[buscar] = this.producto;
                     }
+                    
                     localStorage.setItem('productos', JSON.stringify(this.productos));
                     this.nuevoProducto();
+                    
                 },
                 nuevoProducto(){
                     this.accion = 'nuevo';
