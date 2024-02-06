@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Registro de Alumnos</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div id="app">
+            <div class="row">
+                <div class="col">::.. Registro de Alumnos .::</div>
+            </div>
+            <div class="row">
+                <div class="col col-md-6">
+                    <div class="row p-1">
+                        <div class="col col-md-2">CODIGO</div>
+                        <div class="col col-md-3">
+                            <input v-model="producto.codigo" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">NOMBRE</div>
+                        <div class="col col-md-5">
+                            <input v-model="producto.nombre" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">Direccion</div>
+                        <div class="col col-md-5">
+                            <input v-model="producto.direccion" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">Municipio</div>
+                        <div class="col col-md-3">
+                            <input v-model="producto.municipio" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">Departamento</div>
+                        <div class="col col-md-3">
+                            <input v-model="producto.departamento" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">Telefono</div>
+                        <div class="col col-md-3">
+                            <input v-model="producto.telefono" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">Fecha de Nacimiento</div>
+                        <div class="col col-md-3">
+                            <input v-model="producto.fecha_nacimiento" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col-md-2">Sexo</div>
+                        <div class="col col-md-3">
+                            <input v-model="producto.sexo" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col">
+                            <button @click.prevent.default="guardarProducto" class="btn btn-success">GUARDAR</button>
+                            <button @click.prevent.default="nuevoProducto" class="btn btn-warning">NUEVO</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6">
+                    <form id="frmProducto">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>BUSCAR</th>
+                                    <th colspan="5">
+                                        <input placeholder="codigo, nombre, direccion, municipio, departamento, telefono, fecha de nacimiento, sexo" type="search" v-model="valor" @keyup="buscarProducto" class="form-control">
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>CODIGO</th>
+                                    <th>NOMBRE</th>
+                                    <th>DIRECCION</th>
+                                    <th>MUNICIPIO</th>
+                                    <th>DEPARTAMENTO</th>
+                                    <th>TELEFONO</th>
+                                    <th>FECHA DE NACIMIENTO</th>
+                                    <th>SEXO</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr @click="modificarProducto(producto)" v-for="producto in productos" :key="producto.idProducto">
+                                    <td>{{producto.codigo}}</td>
+                                    <td>{{producto.nombre}}</td>
+                                    <td>{{producto.direccion}}</td>
+                                    <td>{{producto.municipio}}</td>
+                                    <td>{{producto.departamento}}</td>
+                                    <td>{{producto.telefono}}</td>
+                                    <td>{{producto.fecha_nacimiento}}</td>
+                                    <td>{{producto.sexo}}</td>
+                                    <td><button @click.prevent.default="eliminarProducto(producto.idProducto)" class="btn btn-danger">delete</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data:{
+                valor:'',
+                productos:[],
+                accion:'nuevo',
+                producto:{
+                    idProducto: new Date().getTime(),
+                    codigo:'',
+                    nombre:'',
+                    direccion:'',
+                    municipio:'',
+                    departamento:'',
+                    telefono:'',
+                    fecha_nacimiento:'',
+                    sexo:''
+                }
+            },
+            methods:{
+                buscarProducto(e){
+                    if( e.keyCode==8 ){
+                        this.listarProductos();
+                    }
+                    this.productos = this.productos.filter(producto=>producto.codigo.includes(this.valor) || 
+                    producto.nombre.toLowerCase().includes(this.valor.toLowerCase()) || 
+                    producto.direccion.toLowerCase().includes(this.valor.toLowerCase()) || 
+                    producto.municipio.toLowerCase().includes(this.valor.toLowerCase())|| 
+                    producto.departamento.toLowerCase().includes(this.valor.toLowerCase())|| 
+                    producto.telefono.toLowerCase().includes(this.valor.toLowerCase())|| 
+                    producto.fecha_nacimiento.toLowerCase().includes(this.valor.toLowerCase())|| 
+                    producto.sexo.toLowerCase().includes(this.valor.toLowerCase()));
+                },
+                eliminarProducto(idProducto){
+                    if( confirm(`Esta seguro de elimina este alumno?`) ){
+                        let buscar = this.productos.findIndex(producto=>producto.idProducto==idProducto);
+                        this.productos.splice(buscar,1);
+                        localStorage.setItem('productos', JSON.stringify(this.productos));
+                    }
+                },
+                modificarProducto(producto){
+                    this.accion = 'modificar';
+                    this.producto = producto;
+                },
+                guardarProducto(){
+                    //almacenamiento del objeto productos en localStorage
+                    if( this.accion == 'nuevo' ){
+                        this.productos.push(this.producto);
+                    }else if(this.accion == "modificar"){
+                        let buscar = this.productos.findIndex(producto => producto.idProducto==this.producto.idProducto);
+                        this.productos[buscar] = this.producto;
+                    }
+                    localStorage.setItem('productos', JSON.stringify(this.productos));
+                    this.nuevoProducto();
+                },
+                nuevoProducto(){
+                    this.accion = 'nuevo';
+                    this.producto = {
+                        idProducto: new Date().getTime(),
+                        codigo:'',
+                        nombre:'',
+                        direccion:'',
+                        municipio:'',
+                        departamento:'',
+                        telefono:'',
+                        fecha_nacimiento:'',
+                        sexo:''
+                    }
+                },
+                listarProductos(){
+                    this.productos = JSON.parse(localStorage.getItem('productos') || "[]");
+                }
+            },
+            created(){
+                this.listarProductos();
+            }
+        })
+    </script>
+</body>
+</html>
