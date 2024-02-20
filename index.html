@@ -3,204 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Registro de Alumnos</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <title>App de Clientes</title>
+    <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
+    
 </head>
 <body>
-    <div class="container-fluid">
-        <div id="app">
-            <div class="row">
-                <div class="col">::.. Registro de Alumnos .::</div>
-            </div>
-            <div class="row">
-                <div class="col col-md-6">
-                    <div class="row p-1">
-                        <div class="col col-md-2">CODIGO</div>
-                        <div class="col col-md-3">
-                            <input v-model="producto.codigo" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col col-md-2">NOMBRE</div>
-                        <div class="col col-md-5">
-                            <input v-model="producto.nombre" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col col-md-2">DIRECCION</div>
-                        <div class="col col-md-5">
-                            <input v-model="producto.direccion" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col col-md-2">MUNICIPIO</div>
-                        <div class="col col-md-3">
-                            <input v-model="producto.municipio" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col col-md-2">DEPARTAMENTO</div>
-                        <div class="col col-md-3">
-                            <input v-model="producto.departamento" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col col-md-2">TELEFONO</div>
-                        <div class="col col-md-3">
-                            <input v-model="producto.telefono" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col col-md-2">FECHA NACIMIENTO</div>
-                        <div class="col col-md-3">
-                            <input v-model="producto.fecha_nacimiento" type="date" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col col-md-2">SEXO:</div>
-                        <div class="col col-md-3">
-                            <select v-model="producto.sexo" class="form-control">
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                                <option value="Otro">Otro</option>
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row p-1">
-                        <div class="col">
-                            <button @click.prevent.default="guardarProducto" class="btn btn-success">GUARDAR</button>
-                            <button @click.prevent.default="nuevoProducto" class="btn btn-warning">NUEVO</button>
-                        </div>
+    <div class="container-fluid" id="app">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand">::.. Libreria ..::</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" @click="abrirFormulario('cliente')">Clientes</a>
+                        <a class="nav-link" @click="abrirFormulario('lectura')">lectura</a>
                     </div>
                 </div>
-                <div class="col col-md-6">
-                    <form id="frmProducto">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>BUSCAR</th>
-                                    <th colspan="5">
-                                        <input placeholder="codigo, nombre, direccion, municipio, departamento, telefono, fecha de nacimiento, sexo" type="search" v-model="valor" @keyup="buscarProducto" class="form-control">
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>CODIGO</th>
-                                    <th>NOMBRE</th>
-                                    <th>DIRECCION</th>
-                                    <th>MUNICIPIO</th>
-                                    <th>DEPARTAMENTO</th>
-                                    <th>TELEFONO</th>
-                                    <th>FECHA DE NACIMIENTO</th>
-                                    <th>SEXO</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr @click="modificarProducto(producto)" v-for="producto in productos" :key="producto.idProducto">
-                                    <td>{{producto.codigo}}</td>
-                                    <td>{{producto.nombre}}</td>
-                                    <td>{{producto.direccion}}</td>
-                                    <td>{{producto.municipio}}</td>
-                                    <td>{{producto.departamento}}</td>
-                                    <td>{{producto.telefono}}</td>
-                                    <td>{{producto.fecha_nacimiento}}</td>
-                                    <td>{{producto.sexo}}</td>
-                                    <td><button @click.prevent.default="eliminarProducto(producto.idProducto)" class="btn btn-danger">delete</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
             </div>
+        </nav>
+        <div id="appSistema">
+            <componente-clientes ref="cliente" v-show="forms['cliente'].mostrar"></componente-clientes>
+            <componente-lecturas ref="lectura" v-show="forms['lectura'].mostrar"></componente-lecturas>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data:{
-                valor:'',
-                productos:[],
-                accion:'nuevo',
-                producto:{
-                    idProducto: new Date().getTime(),
-                    codigo:'',
-                    nombre:'',
-                    direccion:'',
-                    municipio:'',
-                    departamento:'',
-                    telefono:'',
-                    fecha_nacimiento:'',
-                    sexo:''
-                }
-            },
-            methods:{
-                buscarProducto(e){
-                    if( e.keyCode==8 ){
-                        this.listarProductos();
-                    }
-                    this.productos = this.productos.filter(producto=>producto.codigo.includes(this.valor) || 
-                    producto.nombre.toLowerCase().includes(this.valor.toLowerCase()) || 
-                    producto.direccion.toLowerCase().includes(this.valor.toLowerCase()) || 
-                    producto.municipio.toLowerCase().includes(this.valor.toLowerCase())|| 
-                    producto.departamento.toLowerCase().includes(this.valor.toLowerCase())|| 
-                    producto.telefono.toLowerCase().includes(this.valor.toLowerCase())|| 
-                    producto.fecha_nacimiento.toLowerCase().includes(this.valor.toLowerCase())|| 
-                    producto.sexo.toLowerCase().includes(this.valor.toLowerCase()));
-                },
-                eliminarProducto(idProducto){
-                    if( confirm(`Esta seguro de elimina este alumno?`) ){
-                        let buscar = this.productos.findIndex(producto=>producto.idProducto==idProducto);
-                        this.productos.splice(buscar,1);
-                        localStorage.setItem('productos', JSON.stringify(this.productos));
-                    }
-                },
-                modificarProducto(producto){
-                    this.accion = 'modificar';
-                    this.producto = producto;
-                },
-                guardarProducto(){
-                    if (this.productos.some(producto => producto.codigo === this.producto.codigo     && producto.idProducto !== this.producto.idProducto)) {
-                        alert('El código existente! Ingrese un código diferente.');
-                    return;
-                    }
-                    //almacenamiento del objeto productos en localStorage
-                    if( this.accion == 'nuevo' ){
-                        this.productos.push(this.producto);
-                    }else if(this.accion == "modificar"){
-                        let buscar = this.productos.findIndex(producto => producto.idProducto==this.producto.idProducto);
-                        this.productos[buscar] = this.producto;
-                    }
-                    
-                    localStorage.setItem('productos', JSON.stringify(this.productos));
-                    this.nuevoProducto();
-                    
-                },
-                nuevoProducto(){
-                    this.accion = 'nuevo';
-                    this.producto = {
-                        idProducto: new Date().getTime(),
-                        codigo:'',
-                        nombre:'',
-                        direccion:'',
-                        municipio:'',
-                        departamento:'',
-                        telefono:'',
-                        fecha_nacimiento:'',
-                        sexo:''
-                    }
-                },
-                listarProductos(){
-                    this.productos = JSON.parse(localStorage.getItem('productos') || "[]");
-                }
-            },
-            created(){
-                this.listarProductos();
-            }
-        })
-    </script>
+    <script src="https://unpkg.com/vue-select@3.0.0"></script>
+    <script src="db.js"></script>
+    <script src="cliente.js"></script>
+    <script src="lectura.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
